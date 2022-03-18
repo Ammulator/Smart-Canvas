@@ -8,8 +8,8 @@ import time
 brushThickness=15
 eraserThickness=50
 ############
-
-folderPath="Header"
+#Header Image 
+folderPath="Header1"
 myList=os.listdir(folderPath)
 print(myList)
 overlayList=[]
@@ -21,9 +21,23 @@ print(len(overlayList))
 header=overlayList[0]
 drawColor=(255,0,255)
 
+#Side Image
+folderPath1="Sider"
+myList1=os.listdir(folderPath1)
+print(myList1)
+overlayList1=[]
+for imgP in myList1:
+    image1=cv2.imread(f'{folderPath1}/{imgP}')
+    overlayList1.append(image1)
+print(len(overlayList1))
+
+sider=overlayList1[2]
+
+
+
 cap=cv2.VideoCapture(0)
 cap.set(3,1280)
-cap.set(4,200)
+cap.set(4,720)
 
 detector=htm.handDetector(detectionCon=0.85)
 xp,yp=0,0
@@ -60,24 +74,45 @@ while True:
             xp,yp=0,0
             print("Selection Mode")
             #Checking For Click Color check
-            if y1<125:
-                if 250<x1<450:
+            if y1<167:
+                if 148<x1<312:
                     header=overlayList[0]
                     drawColor=(255,0,255)
-                elif 550<x1<750:
+                elif 368<x1<517:
                     header=overlayList[1]
                     drawColor=(0,255,0)
-                elif 800<x1<950:
+                elif 554<x1<703:
                     header=overlayList[2]
-                    drawColor=(255,0,0)
-                elif 1050<x1<1200:
+                    drawColor=(0,0,255)
+                elif 741<x1<890:
                     header=overlayList[3]
+                    drawColor=(255,0,0)
+                elif 946<x1<1142 and y1<147:
+                    header=overlayList[4]
                     drawColor=(0,0,0)
             cv2.rectangle(img,(x1,y1-25),(x2,y2+25),drawColor,cv2.FILLED)
 
+            if (0<y1<570) and (1180<x1<1280):
+                if 121<y1<174:
+                    sider=overlayList1[0]
+                    brushThickness=25
+                elif 219<y1<272:
+                    sider=overlayList1[1]
+                    brushThickness=20
+                elif 315<y1<368:
+                    sider=overlayList1[2]
+                    brushThickness=15
+                elif 387<y1<440:
+                    sider=overlayList1[3]
+                    brushThickness=10
+                elif 483<y1<526:
+                    sider=overlayList1[4]
+                    brushThickness=5
+
+
         #If Drawing mode - Index is Up
         if fingers[1] and fingers[2]==False:
-            cv2.circle(img,(x1,y1),15,drawColor,cv2.FILLED)
+            cv2.circle(img,(x1,y1),brushThickness,drawColor,cv2.FILLED)
             print("Drawing Mode")
             if xp==0 and yp==0:
                 xp,yp=x1,y1
@@ -101,7 +136,11 @@ while True:
     img=cv2.bitwise_or(img,imgCanvas)
 
     #Setting Header Image
-    img[0:200,0:1280]=header
+    img[0:167,100:1180]=header
+
+    #Setting Sider Image
+    img[0:570,1180:1280]=sider
+
    # img=cv2.addWeighted(img,0.5,imgCanvas,0.5,0)
     cv2.imshow("Image",img)
     cv2.imshow("Canvas",imgCanvas)
